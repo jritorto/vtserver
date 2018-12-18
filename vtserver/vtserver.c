@@ -155,20 +155,23 @@ int get_command(struct vtcmd *v)
   /* Send down the bootstrap code to ODT if we see an @ sign */
   if ((havesentbootcode==0) && (v->hdr1 == '@')) {
     for (i=0,loc=BOOTSTART;i<(sizeof(bootcode)/sizeof(int));i++,loc+=2) {
-	sprintf(bootbuf, "%06o/", loc);
+	sprintf(bootbuf, "L %06o\r", loc);
 	write(portfd, bootbuf, strlen(bootbuf));
 
 	/* wait for current value to print */
-	while (1) { read(portfd, &ch, 1); if (ch==' ') break; }
-	sprintf(bootbuf, "%06o\r", bootcode[i]);
+	while (1) { read(portfd, &ch, 1); putc(ch, stdout); if (ch=='@') break; }
+	sprintf(bootbuf, "D %06o\r", bootcode[i]);
 	write(portfd, bootbuf, strlen(bootbuf));
 
 	/* and suck up any characters sent from ODT */
-	while (1) { read(portfd, &ch, 1); if (ch=='@') break; }
+	while (1) { read(portfd, &ch, 1); putc(ch, stdout); if (ch=='@') break; }
     }
-    sprintf(bootbuf, "%06oG", BOOTSTART);
+    sprintf(bootbuf, "L %06o\n", BOOTSTART);
     write(portfd, bootbuf, strlen(bootbuf));
-    while (1) { read(portfd, &ch, 1); if (ch=='G') break; }
+    while (1) { read(portfd, &ch, 1); putc(ch, stdout); if (ch=='@') break; }
+    sprintf(bootbuf, "S\n");
+    write(portfd, bootbuf, strlen(bootbuf));
+    while (1) { read(portfd, &ch, 1); putc(ch, stdout); if (ch=='S') break; }
     havesentbootcode=1; return(0);
   }
 
