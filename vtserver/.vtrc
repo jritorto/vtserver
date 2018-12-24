@@ -5,7 +5,7 @@
 # First line is any Unix command needed to set the serial port up
 #
 # Use this one with BSD stty (FreeBSD, OpenBSD, Mac OS X, et c.)
-stty -f /dev/tty.usbserial-A600SP1F  9600 cs8 clocal -crtscts
+stty -f /dev/tty.usbserial-A600SP1F 38400 cs8 clocal -crtscts
 #
 # Or this one with GNU stty (GNU/Linux, GNU userlands)
 #stty -F /dev/ttyid1 19200 cs8 clocal -crtscts
@@ -22,7 +22,7 @@ stty -f /dev/tty.usbserial-A600SP1F  9600 cs8 clocal -crtscts
 #   Record 1: a disk image for your root disk
 #
 copy
-2.10.1bsd.rm02
+2.10.1BSD_rl02_1145
 #
 #
 # Alternatively, if you want to install 2.11BSD using the standard
